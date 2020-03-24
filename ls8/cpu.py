@@ -1,13 +1,19 @@
 """CPU functionality."""
 
 import sys
+HLT = 0b00000001
+LDI = 0b10000010
+PRN = 0b01000111
 
 class CPU:
     """Main CPU class."""
 
     def __init__(self):
         """Construct a new CPU."""
-        pass
+        # Add list properties to the CPU class to hold 256 bytes of memory and 8 general-purpose registers
+        self.ram = [0] * (256)
+        self.reg = [0] * (8)
+        self.pc = 0
 
     def load(self):
         """Load a program into memory."""
@@ -62,4 +68,52 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
-        pass
+        running = True
+        while running:
+
+            # read the memory address that's stored in register PC, 
+            # and store that result in IR, the Instruction Register
+            IR = self.ram[self.pc]
+            print(self.pc)
+            print("LDI", LDI)
+            print("PRN", PRN)
+            print("HLT", HLT)
+            
+
+            # Using ram_read(), read the bytes at PC+1 and PC+2 
+            # from RAM into variables operand_a and operand_b in case the instruction needs them.
+            operand_a = self.ram_read(self.pc + 1)
+            operand_b = self.ram_read(self.pc + 2)
+
+            if IR == LDI:
+               
+                r = int(input("Which register (1-8): ")) + 1
+                v = int(input("Enter a value: "))
+                    
+                self.reg[r] = v
+                self.pc += 1
+
+            elif IR == HLT:
+                print("stopping")
+                running = False
+                self.pc += 1
+
+            elif IR == PRN:
+                r = int(input("Which register (1-8): ")) + 1
+                print(self.reg[r])
+                self.pc += 1
+
+        
+
+
+    def ram_read(self, address):
+        '''
+        accept the address to read and return the value stored there.
+        '''
+        return self.ram[address]
+
+    def ram_write(self, address, value):
+        '''
+        accept a value to write, and the address to write it to.
+        '''
+        self.ram[address] = value
