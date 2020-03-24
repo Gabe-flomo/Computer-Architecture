@@ -125,11 +125,12 @@ class CPU:
                 self.pc += 2
             
             if IR == MUL:
+                print("MUL")
                 self.alu("MUL", operand_a, operand_b)
+                self.pc += 3
                 
                 #print(self.reg[operand_a])
-            # else:
-            #     self.pc +=1
+            
 
         
 
